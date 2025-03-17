@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="./logo.jpg" type="image/x-icon">
+  <title>Subhadip Maity :: (SontuCoder)</title>
+
+  <!-- Fonts -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,500&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Preahvihear&family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+    rel="stylesheet">
+
+
+  <!-- Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+  <!-- CSS -->
+  <style>
+    /* Hide default cursor */
+    body {
+      cursor: none;
+      margin: 0;
+      /* overflow-x: hidden; */
+    }
+
+    /* Cursor Styling */
+    .cursor-dot {
+      height: 10px;
+      width: 10px;
+      background: #2696eb;
+      animation: colors 10s infinite;
+    }
+
+    .cursor-outline {
+      height: 30px;
+      width: 30px;
+      background: transparent;
+      border: 3px solid #2696eb;
+      animation: colors 10s infinite;
+    }
+
+    .cursor-dot,
+    .cursor-outline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      pointer-events: none;
+      border-radius: 50%;
+      will-change: transform;
+    }
+
+    @keyframes colors {
+      0% {
+        filter: hue-rotate(0deg);
+      }
+
+      100% {
+        filter: hue-rotate(360deg);
+      }
+    }
+
+    /* Hide custom cursor on touch devices */
+    @media (hover: none) {
+
+      .cursor-dot,
+      .cursor-outline {
+        display: none;
+      }
+    }
+
+    /* Canvas Styling */
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 999;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- React/Content Root -->
+  <div id="root"></div>
+
+  <!-- Custom Cursor Elements -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-outline"></div>
+
+  <!-- Particle Canvas -->
+  <canvas id="canvas"></canvas>
+
+  <script type="module" src="/src/main.jsx"></script>
+  <!-- Main Script -->
+  <script>
+    // Select Elements
+    const cursor = document.querySelector(".cursor-dot");
+    const cursorOutline = document.querySelector(".cursor-outline");
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext('2d');
+
+    // Ensure Canvas Fits Window
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Cursor Position and Particles Array
+    const mouse = { x: undefined, y: undefined };
+    let spots = [];
+    let hue = 0;
+
+    // Update Custom Cursor Position
+    document.addEventListener("mousemove", (e) => {
+      const x = e.clientX;
+      const y = e.clientY;
+
+      // Move Custom Cursor
+      cursor.style.transform = `translate(${x}px, ${y}px)`;
+      cursorOutline.animate({
+        left: `${x}px`,
+        top: `${y}px`,
+      }, { duration: 500, fill: 'forwards' });
+
+      // Update Mouse Position
+      mouse.x = x;
+      mouse.y = y;
+
+      // Create Particles
+      for (let i = 0; i < 3; i++) {
+        spots.push(new Particle());
+      }
+    });
+
+    // Hide Cursor When Mouse Leaves the Window
+    document.addEventListener("mouseout", () => {
+      cursor.style.display = "none";
+      cursorOutline.style.display = "none";
+    });
+
+    // Show Cursor When Mouse Enters the Window
+    document.addEventListener("mouseover", () => {
+      cursor.style.display = "block";
+      cursorOutline.style.display = "block";
+    });
+
+    // Particle Class
+    class Particle {
+      constructor() {
+        this.x = mouse.x;
+        this.y = mouse.y;
+        this.size = Math.random() * 2 + 0.5;
+        this.speedX = Math.random() * 2 - 1;
+        this.speedY = Math.random() * 2 - 1;
+        this.color = `hsl(${hue}, 100%, 50%)`;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.size > 0.1) this.size -= 0.03;
+      }
+
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Handle Particle Movement and Cleanup
+    function handleParticles() {
+      for (let i = 0; i < spots.length; i++) {
+        spots[i].update();
+        spots[i].draw();
+
+        // Connect Particles with Lines
+        for (let j = i; j < spots.length; j++) {
+          const dx = spots[i].x - spots[j].x;
+          const dy = spots[i].y - spots[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 90) {
+            ctx.beginPath();
+            ctx.strokeStyle = spots[i].color;
+            ctx.lineWidth = spots[i].size / 10;
+            ctx.moveTo(spots[i].x, spots[i].y);
+            ctx.lineTo(spots[j].x, spots[j].y);
+            ctx.stroke();
+          }
+        }
+
+        // Remove Small Particles
+        if (spots[i].size <= 0.3) {
+          spots.splice(i, 1);
+          i--;
+        }
+      }
+    }
+
+    // Animation Loop
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      handleParticles();
+      hue++;
+      requestAnimationFrame(animate);
+    }
+
+    // Handle Window Resize
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Stop Particle Generation on Mouse Out
+    window.addEventListener("mouseout", () => {
+      mouse.x = undefined;
+      mouse.y = undefined;
+    });
+
+    // Start Animation
+    animate();
+  </script>
+
+</body>
+
+</html>
