@@ -32,7 +32,7 @@ const Projects = () => {
     return (
         <section className='max-w-[var(--width)] w-full text-[var(--pt)] mf  flex flex-col items-center pt-26 ' id="projects">
             <h3 className="heading">My Projects</h3>
-            <div className=" w-full flex flex-col px-4 items-center -mb-37">
+            <div className=" w-full flex flex-col px-4 items-center ">
                 {
                     projects.map(({pic, name, type, description, readme, link}, index)=>(
                         <ProjectItems key={index} index={index} pic={pic} name={name} type={type} description={description} readme={readme} link={link} />

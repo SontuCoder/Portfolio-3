@@ -2,7 +2,7 @@
 const Skills2 = () => {
     return (
         <div className=" w-[400px] max-w-full flex flex-col items-center pt-5">
-            <p className="underline tracking-wider ">Problem Solved in various platforms</p>
+            <p className="underline tracking-wider text-center">Problem Solved in various platforms</p>
             <div className="flex w-full justify-evenly mt-10 mb-12">
                 <div className="flex flex-col items-center">
                     <p className="text-3xl font-semibold tracking-widest"><span className="">250</span>+</p>

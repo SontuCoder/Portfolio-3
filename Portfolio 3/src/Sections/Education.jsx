@@ -2,8 +2,8 @@ import React from 'react'
 
 const Education = () => {
     return (
-        <section id='education' className='max-w-[var(--width)] w-full text-[var(--pt)] mf flex flex-col items-center mb-10'>
-            <h4 className="heading text-center">My Education Background</h4>
+        <section id='education' className='max-w-[var(--width)] w-full text-[var(--pt)] mf flex flex-col items-center mb-10 mt-50'>
+            <h4 className="heading text-center mb-20">My Education Background</h4>
             <div className="timeline w-full relative">
 
                 <div className="container max-w-[500px] relative left-[50%] py-3 px-10 w-[50%] ">
