@@ -45,14 +45,14 @@ const Navbar = () => {
 
 
     return (
-        <div className="flex mt-0.5">
+        <div className="flex mt-0.5 w-full bg-amber- 50">
             {size ? <span class="material-icons-round sm:!text-4xl !text-3xl v-bg rounded-xl">
                 menu
             </span>
             :
-            <div className="bg-amber-300">
+            <div className="max-w-[600px] w-full flex justify-around">
                 {nav_links.map(({name, nav},index)=>(
-                    <a key={index} href={nav} className="">{name}</a>
+                    <a key={index} href={nav} className="mx-1 mf">{name}</a>
                 ))}
             </div>
             }

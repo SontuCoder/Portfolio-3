@@ -11,7 +11,7 @@ const Home = () => {
                 <p className="text-5xl mb-4 tracking-[-0.6px]">Judged by</p>
                 <p className="text-5xl mt-3">his <span className="text-[var(--st)] tracking-[-1px]">skills</span> ...</p>
                 <img src="./Ellipse 5.png" alt="" className=" absolute h-20 w-[11rem] ml-15 mb-2 -rotate-3 drop-shadow-lg d-shadow" />
-                <button className=" mx-auto mt-15 p-3 text-xl shadow v-shadow rounded-md text-[var(--st)] font-bold text-"><span className="text-lg tracking-[1px]">Download Resume</span></button>
+                <button className=" mx-auto mt-15 p-3 text-xl shadow v-shadow rounded-md text-[var(--st)] font-bold text-"><span className="text-lg tracking-[1px]"><a href="https://drive.google.com/file/d/1-4ecFcLR2b_xMsRLA9EuFnT0dO0O-T05/view?usp=drive_link" target="_blank" download="Subhadip_Maity_CV.pdf" >Download Resume</a> <span className="material-icons-round relative top-1.5">download</span></span></button>
             </div>
         </section>
     )

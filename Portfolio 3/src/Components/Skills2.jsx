@@ -1,16 +1,52 @@
+import { useState, useRef, useEffect} from "react";
 
 const Skills2 = () => {
+        const [count1, setCount1] = useState(0);
+        const [count2, setCount2] = useState(0);
+        const containerRef = useRef(null);
+        const triggered = useRef(false);
+        const leetCode = 250;
+        const HackerRank = 500;
+    
+        useEffect(() => {
+            const handleScroll = () => {
+                if (!containerRef.current) return;
+    
+                const top = containerRef.current.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+    
+                if (top < windowHeight - 50 && !triggered.current) {
+                    triggered.current = true;
+                    let i = 0;
+                    const interval = setInterval(() => {
+                        i++;
+                        setCount1(i);
+                        if (i >= leetCode) clearInterval(interval);
+                    }, 10);
+                    let j = 0;
+                    const interval2 = setInterval(() => {
+                        j++;
+                        setCount2(j);
+                        if (j >= HackerRank) clearInterval(interval2);
+                    }, 10); 
+                }
+            };
+    
+            window.addEventListener("scroll", handleScroll);
+            return () => window.removeEventListener("scroll", handleScroll);
+        }, [leetCode,HackerRank]);
+
     return (
-        <div className=" w-[400px] max-w-full flex flex-col items-center pt-5">
+        <div className=" w-[400px] max-w-full flex flex-col items-center pt-5 " ref={containerRef}>
             <p className="underline tracking-wider text-center">Problem Solved in various platforms</p>
             <div className="flex w-full justify-evenly mt-10 mb-12">
                 <div className="flex flex-col items-center">
-                    <p className="text-3xl font-semibold tracking-widest"><span className="">250</span>+</p>
+                    <p className="text-3xl font-semibold tracking-widest"><span className="">{count1}</span>+</p>
                     <div className="w-25 h-1 rounded my-1 bg-white"></div>
                     <p className="text-xl">LeetCode</p>
                 </div>
                 <div className="flex flex-col items-center">
-                    <p className="text-3xl font-semibold tracking-widest"><span className="">500</span>+</p>
+                    <p className="text-3xl font-semibold tracking-widest"><span className="">{count2}</span>+</p>
                     <div className="w-25 rounded my-1 h-1 bg-white"></div>
                     <p className="text-xl">HackerRank</p>
                 </div>
